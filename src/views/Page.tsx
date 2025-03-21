@@ -14,10 +14,11 @@ import { Excalidraw, WelcomeScreen } from "@excalidraw/excalidraw";
 import { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/types/element/types";
 import { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types/types";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { RefreshCcw } from "lucide-react";
+import { ArrowLeft, RefreshCcw } from "lucide-react";
 import { getDrawData, setDrawData } from "@/db/draw";
 import { drawDataStore } from "@/stores/drawDataStore"; // Adjust the import path as needed
 import { queryClient } from "@/main";
+import { useNavigate } from "@tanstack/react-router";
 
 type PageProps = {
   id: string;
@@ -28,6 +29,7 @@ export default function Page({ id }: PageProps) {
     useState<ExcalidrawImperativeAPI | null>(null);
   const [name, setName] = useState("");
   const { theme } = useTheme();
+  const navigate = useNavigate();
 
   const { data, isLoading } = useQuery({
     queryKey: ["page", id],
@@ -112,6 +114,13 @@ export default function Page({ id }: PageProps) {
             excalidrawAPI={(api) => setExcalidrawAPI(api)}
             renderTopRightUI={() => (
               <div className="flex gap-2">
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  onClick={() => navigate({ to: "/pages" })}
+                >
+                  <ArrowLeft className="size-5" />
+                </Button>
                 <Input
                   onChange={(e) => setName(e.target.value)}
                   value={name}
@@ -128,7 +137,7 @@ export default function Page({ id }: PageProps) {
                         size="icon"
                         onClick={updateScene}
                       >
-                        <RefreshCcw className="h-5 w-5" />
+                        <RefreshCcw className="size-5" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
